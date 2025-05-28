@@ -174,51 +174,7 @@
     sections.forEach(sec => observer.observe(sec));
   </script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const botaoPix = document.getElementById("pay-confirm");
-      if (!botaoPix) return;
 
-      botaoPix.addEventListener("click", async (e) => {
-        e.preventDefault();
-
-        try {
-          const res = await fetch("/api/gerar-pix");
-          if (!res.ok) throw new Error("Erro ao gerar PIX");
-          const data = await res.json();
-
-          const modal = document.createElement("div");
-          Object.assign(modal.style, {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.8)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: "9999"
-          });
-
-          modal.innerHTML = `
-            <div style="background:white;padding:20px;border-radius:8px;text-align:center;max-width:90%;">
-              <h3>Escaneie para pagar com Pix</h3>
-              <img src="data:image/png;base64,${data.qr_code_base64}" style="max-width:300px;width:100%;" />
-              <p><a href="${data.qr_code_url}" target="_blank">Ou clique aqui para pagar</a></p>
-              <button id="close-pix-modal" style="margin-top:10px;">Fechar</button>
-            </div>
-          `;
-
-          document.body.appendChild(modal);
-          document.getElementById("close-pix-modal")
-            .addEventListener("click", () => document.body.removeChild(modal));
-        } catch (err) {
-          alert(err.message);
-        }
-      });
-    });
-  </script>
 
 </body>
 </html>
